@@ -27,6 +27,8 @@ settings = {
 
 
 train = pd.read_csv('driver_imgs_list.csv')
+mask = np.random.choice([False, True], len(train), p=[0.75, 0.25])
+train = train[mask]
 #train = train[0:500]
 
 predict_images = []
@@ -35,6 +37,7 @@ scaled_size = (100,75)
 for i, image in train.iterrows():
     image_path = './train/' + image.classname + '/' + image.img
     predict_image_pil = Image.open(image_path).convert('L') #greyscale
+    predict_image_pil.thumbnail(scaled_size, Image.ANTIALIAS)
     predict_image = np.array(predict_image_pil, 'uint8') #to array
     predict_images.append(predict_image)
     
@@ -88,23 +91,23 @@ percentage = num_detect/float((num_detect + num_not_detect))
 print 'detected {} faces, out of {} ({:0.2f})'.format(num_detect, num_detect + num_not_detect, percentage)
 
 
-print 'predicting using LBPH'
-correct = 0
-incorrect = 0 
-mis=[0,0,0,0,0,0,0]
-recognizer_LBPH.train(train_X,np.array(train_Y))
+# print 'predicting using LBPH'
+# correct = 0
+# incorrect = 0 
+# mis=[0,0,0,0,0,0,0]
+# recognizer_LBPH.train(train_X,np.array(train_Y))
 
-for i, image in enumerate(prediction_data):
+# for i, image in enumerate(prediction_data):
 
-    pred, conf = recognizer_LBPH.predict(image)
+#     pred, conf = recognizer_LBPH.predict(image)
 
-    if pred == prediction_labels[i]:
-        correct += 1
-    else:
-        incorrect += 1
-        #mis[prediction_labels[i]] += 1
-        cv2.imwrite("difficult\\%s_%s_%s.jpg" %(prediction_labels[i], pred, i), image) #<-- this one is new
-print 'accuracy using LBPH: {}%'.format((100*correct)/(correct + incorrect))
+#     if pred == prediction_labels[i]:
+#         correct += 1
+#     else:
+#         incorrect += 1
+#         #mis[prediction_labels[i]] += 1
+#         cv2.imwrite("difficult\\%s_%s_%s.jpg" %(prediction_labels[i], pred, i), image) #<-- this one is new
+# print 'accuracy using LBPH: {}%'.format((100*correct)/(correct + incorrect))
 
 print 'predicting using Fisher'
 correct = 0
@@ -121,19 +124,19 @@ for i, image in enumerate(prediction_data):
 print 'accuracy using Fisher: {}%'.format((100*correct)/(correct + incorrect))
 
 
-print 'predicting using Eigen'
-correct = 0
-incorrect = 0 
-recognizer_Eigen.train(train_X,np.array(train_Y))
-for i, image in enumerate(prediction_data):
+# print 'predicting using Eigen'
+# correct = 0
+# incorrect = 0 
+# recognizer_Eigen.train(train_X,np.array(train_Y))
+# for i, image in enumerate(prediction_data):
 
-    pred, conf = recognizer_Eigen.predict(image)
+#     pred, conf = recognizer_Eigen.predict(image)
 
-    if pred == prediction_labels[i]:
-        correct += 1
-    else:
-        incorrect += 1
-print 'accuracy using Eigen: {}%'.format((100*correct)/(correct + incorrect))
+#     if pred == prediction_labels[i]:
+#         correct += 1
+#     else:
+#         incorrect += 1
+# print 'accuracy using Eigen: {}%'.format((100*correct)/(correct + incorrect))
 
 
 
