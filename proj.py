@@ -34,8 +34,8 @@ predict_images = []
 scaled_size = (100,75)
 for i, image in train.iterrows():
     image_path = './train/' + image.classname + '/' + image.img
-    predict_image_pil = Image.open(image_path).convert('L')
-    predict_image = np.array(predict_image_pil, 'uint8')
+    predict_image_pil = Image.open(image_path).convert('L') #greyscale
+    predict_image = np.array(predict_image_pil, 'uint8') #to array
     predict_images.append(predict_image)
     
 images, predict_images, labels, predict_labels = train_test_split( predict_images, train['classname'], test_size=0.2, random_state=42)
@@ -102,7 +102,7 @@ for i, image in enumerate(prediction_data):
         correct += 1
     else:
         incorrect += 1
-        mis[prediction_labels[i]] += 1
+        #mis[prediction_labels[i]] += 1
         cv2.imwrite("difficult\\%s_%s_%s.jpg" %(prediction_labels[i], pred, i), image) #<-- this one is new
 print 'accuracy using LBPH: {}%'.format((100*correct)/(correct + incorrect))
 
