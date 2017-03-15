@@ -6,6 +6,7 @@ import csv
 import pandas as pd
 import pdb as pdb
 from sklearn.cross_validation import train_test_split
+import time
 
 
 # Different recognizers
@@ -26,10 +27,17 @@ settings = {
 }
 
 
-train = pd.read_csv('driver_imgs_list.csv')
+#train = pd.read_csv('driver_imgs_list.csv')
 mask = np.random.choice([False, True], len(train), p=[0.75, 0.25])
 train = train[mask]
 #train = train[0:500]
+
+image_list = pd.read_csv('driver_imgs_list.csv')
+train_subject_subset = image_list.subject.value_counts()[-9:].index.values
+test_subject_subset = image_list.subject.value_counts()[:-9].index.values
+train = image_list[image_list.subject.isin(train_subject_subset)].reset_index(drop=True)
+test = image_list[image_list.subject.isin(test_subject_subset)].reset_index(drop=True)
+
 
 predict_images = []
 
