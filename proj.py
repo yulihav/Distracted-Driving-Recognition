@@ -28,8 +28,8 @@ settings = {
 
 
 #train = pd.read_csv('driver_imgs_list.csv')
-mask = np.random.choice([False, True], len(train), p=[0.75, 0.25])
-train = train[mask]
+# mask = np.random.choice([False, True], len(train), p=[0.75, 0.25])
+# train = train[mask]
 #train = train[0:500]
 
 image_list = pd.read_csv('driver_imgs_list.csv')
